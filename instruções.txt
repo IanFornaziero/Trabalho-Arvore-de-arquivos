@@ -1,0 +1,5 @@
+Compilar:
+gcc -Wall -Wextra -std=c99 -o simulador src/main.c src/Funcoes.c
+
+Executar:
+simulador.exe
