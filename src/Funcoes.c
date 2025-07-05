@@ -198,7 +198,7 @@ void Type(SistemaArquivos *sistema, const char *nomeDir)
 {
     No *destino = buscarFilho(sistema->diretorioAtual, nomeDir);
 
-    if(destino ==  NULL)
+    if (destino == NULL)
     {
         printf("Diretorio nao encontrado\n");
         return;
@@ -338,14 +338,14 @@ void Mkdir(SistemaArquivos *sistema, const char *nome)
 
 void Echo(SistemaArquivos *sistema, const char *nome)
 {
-    if(buscarFilho(sistema->diretorioAtual, nome)) //caso já exista
+    if (buscarFilho(sistema->diretorioAtual, nome)) // caso já exista
     {
         printf("Erro: '%s' ja existe\n", nome);
         return;
     }
 
-    No *novoFile = criarNo(nome, 0); //cria um novo nó
-    adicionarFilho(sistema -> diretorioAtual, novoFile); //adiciona como filho
+    No *novoFile = criarNo(nome, 0);                   // cria um novo nó
+    adicionarFilho(sistema->diretorioAtual, novoFile); // adiciona como filho
     printf("Arquivo '%s' criado com sucesso\n", nome);
 }
 
@@ -369,12 +369,16 @@ void Help()
 
 void Clear()
 {
-#ifdef _WIN32 || _WIN64
+#ifdef _WIN32
     system("cls");
-#elif __APPLE__ || __linux__
+#elif _WIN64
+    system("cls");
+#elif __APPLE__
+    system("clear");
+#elif __linux__
     system("clear");
 #else
-    printf("Não foi possível limpar a tela neste sistema.\n");
+    printf("Nao foi possivel limpar a tela neste sistema.\n");
 #endif
 }
 
