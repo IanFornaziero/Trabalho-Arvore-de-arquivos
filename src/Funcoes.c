@@ -194,6 +194,19 @@ No *Cd(SistemaArquivos *sistema, const char *caminho)
     }
 }
 
+void Type(SistemaArquivos *sistema, const char *nomeDir)
+{
+    No *destino = buscarFilho(sistema->diretorioAtual, nomeDir);
+
+    if(destino ==  NULL)
+    {
+        printf("Diretorio nao encontrado\n");
+        return;
+    }
+
+    List(destino);
+}
+
 // sugere diretorios com base no prefixo digitado
 void sugerirDiretorios(No *diretorioAtual, const char *prefixo)
 {
@@ -323,6 +336,19 @@ void Mkdir(SistemaArquivos *sistema, const char *nome)
     printf("Diretorio '%s' criado com sucesso\n", nome);
 }
 
+void Echo(SistemaArquivos *sistema, const char *nome)
+{
+    if(buscarFilho(sistema->diretorioAtual, nome)) //caso já exista
+    {
+        printf("Erro: '%s' ja existe\n", nome);
+        return;
+    }
+
+    No *novoFile = criarNo(nome, 0); //cria um novo nó
+    adicionarFilho(sistema -> diretorioAtual, novoFile); //adiciona como filho
+    printf("Arquivo '%s' criado com sucesso\n", nome);
+}
+
 void Help()
 {
     printf("\t=== COMANDOS DISPONIVEIS ===\n");
@@ -331,7 +357,9 @@ void Help()
     printf("cd /            - Vai para o diretorio raiz.\n");
     printf("list            - Lista o conteudo do diretorio atual.\n");
     printf("search <nome>   - Busca por arquivo ou diretorio.\n");
+    printf("type <nome>     - Lista o conteudo de um diretorio\n");
     printf("mkdir <nome>    - Cria um novo diretorio.\n");
+    printf("echo. <nome>    - Cria um novo arquivo.\n");
     printf("rm <nome>       - Remove arquivo ou diretorio.\n");
     printf("clear           - Limpa a tela.\n");
     printf("help            - Mostra esta ajuda.\n");

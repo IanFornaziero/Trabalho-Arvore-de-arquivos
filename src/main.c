@@ -55,6 +55,17 @@ int main(void)
                 printf("Uso: search <nome_do_arquivo>\n");
             }
         }
+        else if(strcmp(comando, "type") == 0)
+        {
+            if (argumento)
+            {
+                Type(sistema, argumento);
+            }
+            else
+            {
+                printf("Uso: type <nome_do_diretorio>");
+            }
+        }
         else if (strcmp(comando, "rm") == 0)
         {
             if (argumento)
@@ -79,6 +90,16 @@ int main(void)
             else
             {
                 printf("Uso: mkdir <nome_do_diretorio>\n");
+            }
+        }
+        else if (strcmp(comando, "echo.") == 0)
+        {
+            if(argumento)
+            {
+                Echo(sistema, argumento);
+            }else
+            {
+                printf("Uso: echo. <nome_do_arquivo>\n");
             }
         }
         else if (strcmp(comando, "clear") == 0)
