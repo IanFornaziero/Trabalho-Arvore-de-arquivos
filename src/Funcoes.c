@@ -341,7 +341,7 @@ void Help()
 
 void Clear()
 {
-    #ifdef _WIN32
+    #ifdef _WIN32 || _WIN64
         system("cls");
     #elif __APPLE__ || __linux__
         system("clear");
