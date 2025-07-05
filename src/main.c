@@ -9,8 +9,6 @@
 #include <string.h>
 #include "Funcoes.h"
 
-// comentario mto legal
-
 int main(void)
 {
     char entrada[256];
@@ -18,19 +16,19 @@ int main(void)
     char *argumento;
     int continuar = 1;
 
-    SistemaArquivos *sistema = inicializar_sistema();
+    SistemaArquivos *sistema = inicializarSistema();
 
     // carrega o arquivo de entrada
-    printf("=== SIMULADOR DE LINHA DE COMANDO ===\n");
-    printf("Carregando estrutura de diretórios...\n");
-    carregar_arquivo(sistema, "data/in.txt");
+    printf("\tSimulador de Diretorio em Linha de Comando\n");
+    printf("Carregando estrutura de diretorios...\n");
+    carregarArquivo(sistema, "data/in.txt");
 
-    printf("\nDigite 'help' para ver os comandos disponíveis.\n");
+    printf("\nDigite 'help' para ver os comandos disponiveis.\n");
 
     do
     {
-        // mostra o prompt com o diretório atual
-        printf("\n%s> ", obter_caminho_atual(sistema->diretorio_atual));
+        // mostra o prompt com o diretorio atual
+        printf("\n%s > ", obterCaminhoAtual(sistema->diretorioAtual));
 
         fgets(entrada, sizeof(entrada), stdin);
         entrada[strcspn(entrada, "\n")] = 0; // apaga o \n
@@ -43,14 +41,14 @@ int main(void)
 
         if (strcmp(comando, "cd") == 0)
         {
-            navegar_cd(sistema, argumento);
+            navegarCd(sistema, argumento);
         }
         else if (strcmp(comando, "search") == 0)
         {
             if (argumento)
             {
                 printf("Buscando por '%s'...\n", argumento);
-                buscar_arquivo(sistema->raiz, argumento, "");
+                buscarArquivo(sistema->raiz, argumento, "");
             }
             else
             {
@@ -61,7 +59,7 @@ int main(void)
         {
             if (argumento)
             {
-                remover_arquivo(sistema, argumento);
+                removerArquivo(sistema, argumento);
             }
             else
             {
@@ -70,13 +68,13 @@ int main(void)
         }
         else if (strcmp(comando, "list") == 0)
         {
-            listar_diretorio(sistema->diretorio_atual);
+            listarDiretorio(sistema->diretorioAtual);
         }
         else if (strcmp(comando, "mkdir") == 0)
         {
             if (argumento)
             {
-                criar_diretorio(sistema, argumento);
+                criarDiretorio(sistema, argumento);
             }
             else
             {
@@ -89,7 +87,7 @@ int main(void)
         }
         else if (strcmp(comando, "help") == 0)
         {
-            mostrar_ajuda();
+            mostrarAjuda();
         }
         else if (strcmp(comando, "exit") == 0)
         {
@@ -98,12 +96,12 @@ int main(void)
         }
         else
         {
-            printf("Comando '%s' não reconhecido. Digite 'help' para ver os comandos disponíveis.\n", comando);
+            printf("Comando '%s' nao reconhecido. Digite 'help' para ver os comandos disponiveis.\n", comando);
         }
 
     } while (continuar);
 
-    // libera a memória
-    liberar_sistema(sistema);
+    // libera a memoria
+    liberarSistema(sistema);
     return 0;
 }

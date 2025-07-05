@@ -1,92 +1,92 @@
 #include "Funcoes.h"
 
-SistemaArquivos *inicializar_sistema()
+SistemaArquivos *inicializarSistema()
 {
     SistemaArquivos *sistema = (SistemaArquivos *)malloc(sizeof(SistemaArquivos));
-    sistema->raiz = criar_no("", 1);
-    sistema->diretorio_atual = sistema->raiz;
+    sistema->raiz = criarNo("", 1);
+    sistema->diretorioAtual = sistema->raiz;
     return sistema;
 }
 
-No *criar_no(const char *nome, int eh_diretorio)
+No *criarNo(const char *nome, int ehDiretorio)
 {
     No *novo = (No *)malloc(sizeof(No));
     strcpy(novo->nome, nome);
-    novo->eh_diretorio = eh_diretorio;
-    novo->primeiro_filho = NULL;
-    novo->proximo_irmao = NULL;
+    novo->ehDiretorio = ehDiretorio;
+    novo->primeiroFilho = NULL;
+    novo->proximoIrmao = NULL;
     novo->pai = NULL;
     return novo;
 }
 
-No *buscar_filho(No *pai, const char *nome)
+No *buscarFilho(No *pai, const char *nome)
 {
-    if (!pai || !pai->primeiro_filho)
+    if (!pai || !pai->primeiroFilho)
         return NULL;
 
-    No *atual = pai->primeiro_filho;
+    No *atual = pai->primeiroFilho;
     while (atual)
     {
         if (strcmp(atual->nome, nome) == 0)
         {
             return atual;
         }
-        atual = atual->proximo_irmao;
+        atual = atual->proximoIrmao;
     }
     return NULL;
 }
 
-void adicionar_filho(No *pai, No *filho)
+void adicionarFilho(No *pai, No *filho)
 {
     filho->pai = pai;
 
-    if (!pai->primeiro_filho)
+    if (!pai->primeiroFilho)
     {
-        pai->primeiro_filho = filho;
+        pai->primeiroFilho = filho;
     }
     else
     {
-        No *atual = pai->primeiro_filho;
-        while (atual->proximo_irmao)
+        No *atual = pai->primeiroFilho;
+        while (atual->proximoIrmao)
         {
-            atual = atual->proximo_irmao;
+            atual = atual->proximoIrmao;
         }
-        atual->proximo_irmao = filho;
+        atual->proximoIrmao = filho;
     }
 }
 
-void construir_arvore(SistemaArquivos *sistema, const char *caminho)
+void construirArvore(SistemaArquivos *sistema, const char *caminho)
 {
-    char caminho_copia[512];
-    strcpy(caminho_copia, caminho);
+    char caminhoCopia[512];
+    strcpy(caminhoCopia, caminho);
 
     No *atual = sistema->raiz;
-    char *token = strtok(caminho_copia, "/");
+    char *token = strtok(caminhoCopia, "/");
 
     while (token)
     {
-        No *filho = buscar_filho(atual, token);
+        No *filho = buscarFilho(atual, token);
 
         if (!filho)
         {
-            // verifica se é o último token (pode ser arquivo)
-            char *proximo_token = strtok(NULL, "/");
-            int eh_diretorio = (proximo_token != NULL);
+            // verifica se e o ultimo token (pode ser arquivo)
+            char *proximoToken = strtok(NULL, "/");
+            int ehDiretorio = (proximoToken != NULL);
 
-            // se não é o último, é definitivamente um diretório
-            // se é o último, pode ser arquivo (sem extensão = diretório, com extensão = arquivo)
-            if (!eh_diretorio)
+            // se nao e o ultimo, e definitivamente um diretorio
+            // se e o ultimo, pode ser arquivo (sem extensao = diretorio, com extensao = arquivo)
+            if (!ehDiretorio)
             {
-                eh_diretorio = (strchr(token, '.') == NULL);
+                ehDiretorio = (strchr(token, '.') == NULL);
             }
 
-            filho = criar_no(token, eh_diretorio);
-            adicionar_filho(atual, filho);
+            filho = criarNo(token, ehDiretorio);
+            adicionarFilho(atual, filho);
 
-            // se havia um próximo token, continua a partir dele
-            if (proximo_token)
+            // se havia um proximo token, continua a partir dele
+            if (proximoToken)
             {
-                token = proximo_token;
+                token = proximoToken;
                 atual = filho;
                 continue;
             }
@@ -97,13 +97,13 @@ void construir_arvore(SistemaArquivos *sistema, const char *caminho)
     }
 }
 
-// carrega o arquivo de entrada e constrói a árvore
-void carregar_arquivo(SistemaArquivos *sistema, const char *nome_arquivo)
+// carrega o arquivo de entrada e constroi a arvore
+void carregarArquivo(SistemaArquivos *sistema, const char *nomeArquivo)
 {
-    FILE *arquivo = fopen(nome_arquivo, "r");
+    FILE *arquivo = fopen(nomeArquivo, "r");
     if (!arquivo)
     {
-        printf("Erro: Não foi possível abrir o arquivo %s\n", nome_arquivo);
+        printf("Erro: Nao foi possivel abrir o arquivo %s\n", nomeArquivo);
         return;
     }
 
@@ -115,34 +115,34 @@ void carregar_arquivo(SistemaArquivos *sistema, const char *nome_arquivo)
 
         if (strlen(linha) > 0)
         {
-            construir_arvore(sistema, linha);
+            construirArvore(sistema, linha);
         }
     }
 
     fclose(arquivo);
-    printf("Árvore de diretórios carregada com sucesso!\n");
+    printf("Arvore de diretorios carregada com sucesso!\n");
 }
 
-// lista o conteúdo de um diretório
-void listar_diretorio(No *diretorio)
+// lista o conteudo de um diretorio
+void listarDiretorio(No *diretorio)
 {
-    if (!diretorio || !diretorio->eh_diretorio)
+    if (!diretorio || !diretorio->ehDiretorio)
     {
-        printf("Erro: Não é um diretório válido\n");
+        printf("Erro: Nao e um diretorio valido\n");
         return;
     }
 
-    if (!diretorio->primeiro_filho)
+    if (!diretorio->primeiroFilho)
     {
-        printf("Diretório vazio\n");
+        printf("Diretorio vazio\n");
         return;
     }
 
-    No *atual = diretorio->primeiro_filho;
-    printf("Conteúdo do diretório:\n");
+    No *atual = diretorio->primeiroFilho;
+    printf("Conteudo do diretorio:\n");
     while (atual)
     {
-        if (atual->eh_diretorio)
+        if (atual->ehDiretorio)
         {
             printf("[DIR]  %s\n", atual->nome);
         }
@@ -150,85 +150,85 @@ void listar_diretorio(No *diretorio)
         {
             printf("[FILE] %s\n", atual->nome);
         }
-        atual = atual->proximo_irmao;
+        atual = atual->proximoIrmao;
     }
 }
 
-// navega para um diretório (comando cd)
-No *navegar_cd(SistemaArquivos *sistema, const char *caminho)
+// navega para um diretorio (comando cd)
+No *navegarCd(SistemaArquivos *sistema, const char *caminho)
 {
     if (!caminho)
     {
-        return sistema->diretorio_atual;
+        return sistema->diretorioAtual;
     }
 
-    // se é "..", volta para o pai
+    // se e "..", volta para o pai
     if (strcmp(caminho, "..") == 0)
     {
-        if (sistema->diretorio_atual->pai)
+        if (sistema->diretorioAtual->pai)
         {
-            sistema->diretorio_atual = sistema->diretorio_atual->pai;
+            sistema->diretorioAtual = sistema->diretorioAtual->pai;
         }
-        return sistema->diretorio_atual;
+        return sistema->diretorioAtual;
     }
 
-    // se é "/", vai para a raiz
+    // se e "/", vai para a raiz
     if (strcmp(caminho, "/") == 0)
     {
-        sistema->diretorio_atual = sistema->raiz;
-        return sistema->diretorio_atual;
+        sistema->diretorioAtual = sistema->raiz;
+        return sistema->diretorioAtual;
     }
 
-    // busca o diretório filho
-    No *destino = buscar_filho(sistema->diretorio_atual, caminho);
-    if (destino && destino->eh_diretorio)
+    // busca o diretorio filho
+    No *destino = buscarFilho(sistema->diretorioAtual, caminho);
+    if (destino && destino->ehDiretorio)
     {
-        sistema->diretorio_atual = destino;
+        sistema->diretorioAtual = destino;
         return destino;
     }
     else
     {
-        // tenta sugerir diretórios similares
-        sugerir_diretorios(sistema->diretorio_atual, caminho);
+        // tenta sugerir diretorios similares
+        sugerirDiretorios(sistema->diretorioAtual, caminho);
         return NULL;
     }
 }
 
-// sugere diretórios com base no prefixo digitado
-void sugerir_diretorios(No *diretorio_atual, const char *prefixo)
+// sugere diretorios com base no prefixo digitado
+void sugerirDiretorios(No *diretorioAtual, const char *prefixo)
 {
-    if (!diretorio_atual || !prefixo)
+    if (!diretorioAtual || !prefixo)
         return;
 
-    int encontrou_sugestoes = 0;
-    int len_prefixo = strlen(prefixo);
+    int encontrouSugestoes = 0;
+    int lenPrefixo = strlen(prefixo);
 
-    // percorre todos os filhos do diretório atual
-    No *filho = diretorio_atual->primeiro_filho;
+    // percorre todos os filhos do diretorio atual
+    No *filho = diretorioAtual->primeiroFilho;
 
     while (filho)
     {
-        // verifica se é um diretório e se o nome começa com o prefixo
-        if (filho->eh_diretorio && strncmp(filho->nome, prefixo, len_prefixo) == 0)
+        // verifica se e um diretorio e se o nome comeca com o prefixo
+        if (filho->ehDiretorio && strncmp(filho->nome, prefixo, lenPrefixo) == 0)
         {
-            if (!encontrou_sugestoes)
+            if (!encontrouSugestoes)
             {
-                printf("Diretório '%s' não encontrado. Você quis dizer:\n", prefixo);
-                encontrou_sugestoes = 1;
+                printf("Diretorio '%s' nao encontrado. Voce quis dizer:\n", prefixo);
+                encontrouSugestoes = 1;
             }
             printf("  - %s\n", filho->nome);
         }
-        filho = filho->proximo_irmao;
+        filho = filho->proximoIrmao;
     }
 
-    if (!encontrou_sugestoes)
+    if (!encontrouSugestoes)
     {
-        printf("Diretório '%s' não encontrado\n", prefixo);
+        printf("Diretorio '%s' nao encontrado\n", prefixo);
     }
 }
 
-// busca recursivamente por um arquivo ou diretório
-void buscar_arquivo(No *raiz, const char *nome, const char *caminho_atual)
+// busca recursivamente por um arquivo ou diretorio
+void buscarArquivo(No *raiz, const char *nome, const char *caminhoAtual)
 {
     if (!raiz)
         return;
@@ -236,9 +236,9 @@ void buscar_arquivo(No *raiz, const char *nome, const char *caminho_atual)
     // verifica se o nome atual corresponde ao que estamos buscando
     if (strlen(raiz->nome) > 0 && strcmp(raiz->nome, nome) == 0)
     {
-        if (strlen(caminho_atual) > 0)
+        if (strlen(caminhoAtual) > 0)
         {
-            printf("Encontrado: %s/%s\n", caminho_atual, raiz->nome);
+            printf("Encontrado: %s/%s\n", caminhoAtual, raiz->nome);
         }
         else
         {
@@ -246,100 +246,100 @@ void buscar_arquivo(No *raiz, const char *nome, const char *caminho_atual)
         }
     }
 
-    // busca nos filhos se for um diretório
-    if (raiz->eh_diretorio && raiz->primeiro_filho)
+    // busca nos filhos se for um diretorio
+    if (raiz->ehDiretorio && raiz->primeiroFilho)
     {
-        char novo_caminho[512];
+        char novoCaminho[512];
         if (strlen(raiz->nome) > 0)
         {
-            if (strlen(caminho_atual) > 0)
+            if (strlen(caminhoAtual) > 0)
             {
-                sprintf(novo_caminho, "%s/%s", caminho_atual, raiz->nome);
+                sprintf(novoCaminho, "%s/%s", caminhoAtual, raiz->nome);
             }
             else
             {
-                strcpy(novo_caminho, raiz->nome);
+                strcpy(novoCaminho, raiz->nome);
             }
         }
         else
         {
-            strcpy(novo_caminho, caminho_atual);
+            strcpy(novoCaminho, caminhoAtual);
         }
 
-        No *filho = raiz->primeiro_filho;
+        No *filho = raiz->primeiroFilho;
         while (filho)
         {
-            buscar_arquivo(filho, nome, novo_caminho);
-            filho = filho->proximo_irmao;
+            buscarArquivo(filho, nome, novoCaminho);
+            filho = filho->proximoIrmao;
         }
     }
 }
 
-// remove um arquivo ou diretório
-void remover_arquivo(SistemaArquivos *sistema, const char *nome)
+// remove um arquivo ou diretorio
+void removerArquivo(SistemaArquivos *sistema, const char *nome)
 {
-    No *pai = sistema->diretorio_atual;
-    No *alvo = buscar_filho(pai, nome);
+    No *pai = sistema->diretorioAtual;
+    No *alvo = buscarFilho(pai, nome);
 
     if (!alvo)
     {
-        printf("Erro: '%s' não encontrado\n", nome);
+        printf("Erro: '%s' nao encontrado\n", nome);
         return;
     }
 
     // remove da lista de filhos
-    if (pai->primeiro_filho == alvo)
+    if (pai->primeiroFilho == alvo)
     {
-        pai->primeiro_filho = alvo->proximo_irmao;
+        pai->primeiroFilho = alvo->proximoIrmao;
     }
     else
     {
-        No *anterior = pai->primeiro_filho;
-        while (anterior && anterior->proximo_irmao != alvo)
+        No *anterior = pai->primeiroFilho;
+        while (anterior && anterior->proximoIrmao != alvo)
         {
-            anterior = anterior->proximo_irmao;
+            anterior = anterior->proximoIrmao;
         }
         if (anterior)
         {
-            anterior->proximo_irmao = alvo->proximo_irmao;
+            anterior->proximoIrmao = alvo->proximoIrmao;
         }
     }
 
-    // libera memória recursivamente se for diretório
-    liberar_arvore(alvo);
+    // libera memoria recursivamente se for diretorio
+    liberarArvore(alvo);
     printf("'%s' removido com sucesso\n", nome);
 }
 
-void criar_diretorio(SistemaArquivos *sistema, const char *nome)
+void criarDiretorio(SistemaArquivos *sistema, const char *nome)
 {
-    if (buscar_filho(sistema->diretorio_atual, nome))
+    if (buscarFilho(sistema->diretorioAtual, nome))
     {
-        printf("Erro: '%s' já existe\n", nome);
+        printf("Erro: '%s' ja existe\n", nome);
         return;
     }
 
-    No *novo_dir = criar_no(nome, 1);
-    adicionar_filho(sistema->diretorio_atual, novo_dir);
-    printf("Diretório '%s' criado com sucesso\n", nome);
+    No *novoDir = criarNo(nome, 1);
+    adicionarFilho(sistema->diretorioAtual, novoDir);
+    printf("Diretorio '%s' criado com sucesso\n", nome);
 }
 
-void mostrar_ajuda()
+void mostrarAjuda()
 {
-    printf("\t=== COMANDOS DISPONÍVEIS ===\n");
-    printf("cd <diretorio>  - Navega para o diretório especificado.\n");
-    printf("cd ..           - Volta para o diretório pai.\n");
-    printf("cd /            - Vai para o diretório raiz.\n");
-    printf("list            - Lista o conteúdo do diretório atual.\n");
-    printf("search <nome>   - Busca por arquivo ou diretório.\n");
-    printf("mkdir <nome>    - Cria um novo diretório.\n");
-    printf("rm <nome>       - Remove arquivo ou diretório.\n");
+    printf("\t=== COMANDOS DISPONIVEIS ===\n");
+    printf("cd <diretorio>  - Navega para o diretorio especificado.\n");
+    printf("cd ..           - Volta para o diretorio pai.\n");
+    printf("cd /            - Vai para o diretorio raiz.\n");
+    printf("list            - Lista o conteudo do diretorio atual.\n");
+    printf("search <nome>   - Busca por arquivo ou diretorio.\n");
+    printf("mkdir <nome>    - Cria um novo diretorio.\n");
+    printf("rm <nome>       - Remove arquivo ou diretorio.\n");
     printf("clear           - Limpa a tela.\n");
     printf("help            - Mostra esta ajuda.\n");
     printf("exit            - Sai do programa.\n");
     printf("\t=============================\n\n");
 }
 
-char *obter_caminho_atual(No *diretorio)
+char *obterCaminhoAtual(No *diretorio)
 {
     static char caminho[512];
     caminho[0] = '\0';
@@ -351,7 +351,7 @@ char *obter_caminho_atual(No *diretorio)
     }
 
     char temp[512];
-    strcpy(temp, obter_caminho_atual(diretorio->pai));
+    strcpy(temp, obterCaminhoAtual(diretorio->pai));
 
     if (strlen(diretorio->nome) > 0)
     {
@@ -366,27 +366,27 @@ char *obter_caminho_atual(No *diretorio)
     return caminho;
 }
 
-void liberar_arvore(No *no)
+void liberarArvore(No *no)
 {
     if (!no)
         return;
 
-    No *filho = no->primeiro_filho;
+    No *filho = no->primeiroFilho;
     while (filho)
     {
-        No *proximo = filho->proximo_irmao;
-        liberar_arvore(filho);
+        No *proximo = filho->proximoIrmao;
+        liberarArvore(filho);
         filho = proximo;
     }
 
     free(no);
 }
 
-void liberar_sistema(SistemaArquivos *sistema)
+void liberarSistema(SistemaArquivos *sistema)
 {
     if (sistema)
     {
-        liberar_arvore(sistema->raiz);
+        liberarArvore(sistema->raiz);
         free(sistema);
     }
 }

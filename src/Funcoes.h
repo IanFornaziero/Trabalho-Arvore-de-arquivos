@@ -5,37 +5,37 @@
 #include <stdlib.h>
 #include <string.h>
 
-// representa um nó da árvore (arquivo ou diretório)
+// representa um no da arvore (arquivo ou diretorio)
 typedef struct No
 {
     char nome[256];
-    int eh_diretorio;          // 1 se for diretório, 0 se for arquivo
-    struct No *primeiro_filho; // primeiro filho (subdiretório ou arquivo)
-    struct No *proximo_irmao;  // próximo irmão no mesmo nível
+    int ehDiretorio;          // 1 se for diretorio, 0 se for arquivo
+    struct No *primeiroFilho; // primeiro filho (subdiretorio ou arquivo)
+    struct No *proximoIrmao;  // proximo irmao no mesmo nivel
     struct No *pai;
 } No;
 
 typedef struct
 {
-    No *raiz;
-    No *diretorio_atual;
+    No *raiz;           // No raiz da arvore
+    No *diretorioAtual; // Diretorio atual onde o usuario esta
 } SistemaArquivos;
 
-SistemaArquivos *inicializar_sistema();
-void liberar_arvore(No *no);
-void liberar_sistema(SistemaArquivos *sistema);
-No *criar_no(const char *nome, int eh_diretorio);
-No *buscar_filho(No *pai, const char *nome);
-void adicionar_filho(No *pai, No *filho);
-void construir_arvore(SistemaArquivos *sistema, const char *caminho);
-void carregar_arquivo(SistemaArquivos *sistema, const char *nome_arquivo);
-void listar_diretorio(No *diretorio);
-No *navegar_cd(SistemaArquivos *sistema, const char *caminho);
-void buscar_arquivo(No *raiz, const char *nome, const char *caminho_atual);
-void remover_arquivo(SistemaArquivos *sistema, const char *nome);
-void criar_diretorio(SistemaArquivos *sistema, const char *nome);
-void mostrar_ajuda();
-char *obter_caminho_atual(No *diretorio);
-void sugerir_diretorios(No *diretorio_atual, const char *prefixo);
+SistemaArquivos *inicializarSistema();
+void liberarArvore(No *no);
+void liberarSistema(SistemaArquivos *sistema);
+No *criarNo(const char *nome, int ehDiretorio);
+No *buscarFilho(No *pai, const char *nome);
+void adicionarFilho(No *pai, No *filho);
+void construirArvore(SistemaArquivos *sistema, const char *caminho);
+void carregarArquivo(SistemaArquivos *sistema, const char *nomeArquivo);
+void listarDiretorio(No *diretorio);
+No *navegarCd(SistemaArquivos *sistema, const char *caminho);
+void buscarArquivo(No *raiz, const char *nome, const char *caminhoAtual);
+void removerArquivo(SistemaArquivos *sistema, const char *nome);
+void criarDiretorio(SistemaArquivos *sistema, const char *nome);
+void mostrarAjuda();
+char *obterCaminhoAtual(No *diretorio);
+void sugerirDiretorios(No *diretorioAtual, const char *prefixo);
 
 #endif
