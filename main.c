@@ -7,7 +7,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "Funcoes.h"
+// #include "Funcoes.h"
+
+//esse commit foi com o CLION
 
 int main(void)
 {
