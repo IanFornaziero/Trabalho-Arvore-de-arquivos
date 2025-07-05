@@ -341,13 +341,13 @@ void Help()
 
 void Clear()
 {
-    #ifdef _WIN32
-        system("cls");
-    #elif __APPLE__ || __linux__
-        system("clear");
-    #else
-        printf("Não foi possível limpar a tela neste sistema.\n");
-    #endif
+#ifdef _WIN32
+    system("cls");
+#elif __APPLE__ || __linux__
+    system("clear");
+#else
+    printf("Não foi possível limpar a tela neste sistema.\n");
+#endif
 }
 
 char *obterCaminhoAtual(No *diretorio)
