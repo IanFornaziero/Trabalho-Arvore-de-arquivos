@@ -41,14 +41,14 @@ int main(void)
 
         if (strcmp(comando, "cd") == 0)
         {
-            navegarCd(sistema, argumento);
+            Cd(sistema, argumento);
         }
         else if (strcmp(comando, "search") == 0)
         {
             if (argumento)
             {
                 printf("Buscando por '%s'...\n", argumento);
-                buscarArquivo(sistema->raiz, argumento, "");
+                Search(sistema->raiz, argumento, "");
             }
             else
             {
@@ -59,7 +59,7 @@ int main(void)
         {
             if (argumento)
             {
-                removerArquivo(sistema, argumento);
+                Rm(sistema, argumento);
             }
             else
             {
@@ -68,13 +68,13 @@ int main(void)
         }
         else if (strcmp(comando, "list") == 0)
         {
-            listarDiretorio(sistema->diretorioAtual);
+            List(sistema->diretorioAtual);
         }
         else if (strcmp(comando, "mkdir") == 0)
         {
             if (argumento)
             {
-                criarDiretorio(sistema, argumento);
+                Mkdir(sistema, argumento);
             }
             else
             {
@@ -83,11 +83,11 @@ int main(void)
         }
         else if (strcmp(comando, "clear") == 0)
         {
-            system("cls");
+            Clear();
         }
         else if (strcmp(comando, "help") == 0)
         {
-            mostrarAjuda();
+            Help();
         }
         else if (strcmp(comando, "exit") == 0)
         {

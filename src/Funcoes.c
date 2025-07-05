@@ -124,7 +124,7 @@ void carregarArquivo(SistemaArquivos *sistema, const char *nomeArquivo)
 }
 
 // lista o conteudo de um diretorio
-void listarDiretorio(No *diretorio)
+void List(No *diretorio)
 {
     if (!diretorio || !diretorio->ehDiretorio)
     {
@@ -155,7 +155,7 @@ void listarDiretorio(No *diretorio)
 }
 
 // navega para um diretorio (comando cd)
-No *navegarCd(SistemaArquivos *sistema, const char *caminho)
+No *Cd(SistemaArquivos *sistema, const char *caminho)
 {
     if (!caminho)
     {
@@ -228,7 +228,7 @@ void sugerirDiretorios(No *diretorioAtual, const char *prefixo)
 }
 
 // busca recursivamente por um arquivo ou diretorio
-void buscarArquivo(No *raiz, const char *nome, const char *caminhoAtual)
+void Search(No *raiz, const char *nome, const char *caminhoAtual)
 {
     if (!raiz)
         return;
@@ -276,7 +276,7 @@ void buscarArquivo(No *raiz, const char *nome, const char *caminhoAtual)
 }
 
 // remove um arquivo ou diretorio
-void removerArquivo(SistemaArquivos *sistema, const char *nome)
+void Rm(SistemaArquivos *sistema, const char *nome)
 {
     No *pai = sistema->diretorioAtual;
     No *alvo = buscarFilho(pai, nome);
@@ -310,7 +310,7 @@ void removerArquivo(SistemaArquivos *sistema, const char *nome)
     printf("'%s' removido com sucesso\n", nome);
 }
 
-void criarDiretorio(SistemaArquivos *sistema, const char *nome)
+void Mkdir(SistemaArquivos *sistema, const char *nome)
 {
     if (buscarFilho(sistema->diretorioAtual, nome))
     {
@@ -323,7 +323,7 @@ void criarDiretorio(SistemaArquivos *sistema, const char *nome)
     printf("Diretorio '%s' criado com sucesso\n", nome);
 }
 
-void mostrarAjuda()
+void Help()
 {
     printf("\t=== COMANDOS DISPONIVEIS ===\n");
     printf("cd <diretorio>  - Navega para o diretorio especificado.\n");
@@ -337,6 +337,17 @@ void mostrarAjuda()
     printf("help            - Mostra esta ajuda.\n");
     printf("exit            - Sai do programa.\n");
     printf("\t=============================\n\n");
+}
+
+void Clear()
+{
+    #ifdef _WIN32
+        system("cls");
+    #elif __APPLE__ || __linux__
+        system("clear");
+    #else
+        printf("Não foi possível limpar a tela neste sistema.\n");
+    #endif
 }
 
 char *obterCaminhoAtual(No *diretorio)
