@@ -9,6 +9,8 @@
 #include <string.h>
 #include "Funcoes.h"
 
+// comentario mto legal
+
 int main(void)
 {
     char entrada[256];
