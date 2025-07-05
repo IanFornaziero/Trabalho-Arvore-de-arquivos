@@ -269,7 +269,7 @@ void Search(No *raiz, const char *nome, const char *caminhoAtual)
         No *filho = raiz->primeiroFilho;
         while (filho)
         {
-            buscarArquivo(filho, nome, novoCaminho);
+            Search(filho, nome, novoCaminho);
             filho = filho->proximoIrmao;
         }
     }
